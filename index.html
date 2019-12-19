@@ -7,33 +7,45 @@
   </head>
 
   <body>
-    <div class="js-container">
-      <div class="js-clock">
-        <h1 class="js-title">00:00</h1>
-      </div>
-      <form class="js-form form">
-        <input type="text" placeholder="What is your name?" />
-      </form>
-      <h4 class="js-greetings greetings"></h4>
-      <form class="js-toDoForm">
-        <input type="text" placeholder="Write a to do" />
-      </form>
-      <div class="js-cover">
-        <div class="scroll-bg"></div>
-        <div class="scroll-active"></div>
-        <ul class="js-toDoList"></ul>
-      </div>
-      <div class="js-weather"></div>
+    <div class="header">
+      <ul class="thumbnails"></ul>
     </div>
-    <div class="js-memo-list">
-      <input type="text" readonly />
-      <div class="setting">
-        <button class="size-down">-</button>
-        <span class="font-size"></span>
-        <button class="size-up">+</button>
+    <div class="body">
+      <div class="js-container">
+        <div class="js-clock">
+          <h1 class="js-title">00:00</h1>
+        </div>
+        <form class="js-form form">
+          <input type="text" placeholder="What is your name?" />
+        </form>
+        <h4 class="js-greetings greetings"></h4>
+        <form class="js-toDoForm">
+          <input type="text" placeholder="Write a to do" />
+        </form>
+        <div class="js-cover">
+          <div class="scroll-bg"></div>
+          <div class="scroll-active"></div>
+          <ul class="js-toDoList"></ul>
+        </div>
+        <div class="js-weather"></div>
       </div>
-      <textarea></textarea>
-      <!-- <button>Save</button> -->
+      <div class="js-memo-list">
+        <input type="text" readonly />
+        <div class="setting">
+          <button class="size-down">-</button>
+          <span class="font-size"></span>
+          <button class="size-up">+</button>
+        </div>
+        <textarea></textarea>
+        <div class="js-done-list">
+          <div class="done-list-title">DONE List</div>
+          <div class="done-cover">
+            <div class="scroll-bg"></div>
+            <div class="scroll-active"></div>
+            <ul class="done-list"></ul>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="toast"></div>
     <script src="clock.js"></script>
@@ -42,5 +54,6 @@
     <script src="bg.js"></script>
     <script src="weather.js"></script>
     <script src="memo.js"></script>
+    <script src="header.js"></script>
   </body>
 </html>

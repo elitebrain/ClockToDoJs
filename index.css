@@ -5,6 +5,8 @@ body {
   width: 100vw;
   height: 100vh;
   margin: 0;
+  padding-top: 30px;
+  box-sizing: border-box;
 }
 input {
   border: none;
@@ -36,6 +38,7 @@ li > span {
   color: #f384f3;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 li > span:hover {
   cursor: pointer;
@@ -54,6 +57,38 @@ button {
 button:hover {
   cursor: pointer;
 }
+.header {
+  width: 1200px;
+  height: 55px;
+  margin: auto;
+  margin-bottom: 30px;
+  background-color: rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+.thumbnails {
+  padding: 0;
+  width: 100%;
+}
+.thumbnail {
+  display: inline-block;
+  width: 80px;
+  height: 45px;
+  margin: 5px;
+}
+.thumbnail > img {
+  width: 100%;
+  height: 100%;
+}
+.thumbnail > img:hover {
+  cursor: pointer;
+}
+.body {
+  width: 1200px;
+  height: 780px;
+  overflow: hidden;
+  text-align: center;
+  margin: auto;
+}
 .js-cover {
   position: relative;
   width: 400px;
@@ -61,7 +96,6 @@ button:hover {
   overflow: hidden;
 }
 .js-cover .scroll-bg {
-  content: "";
   position: absolute;
   width: 10px;
   height: 360px;
@@ -81,43 +115,96 @@ button:hover {
   border-radius: 30px;
   opacity: 0;
 }
+.done-cover {
+  position: relative;
+  width: 576px;
+  height: 324px;
+  overflow: hidden;
+}
+.done-cover .scroll-bg {
+  position: absolute;
+  width: 10px;
+  height: 324px;
+  right: 0px;
+  top: 0;
+  background-color: #f384f3;
+  border-radius: 30px;
+  opacity: 0;
+}
+.done-cover .scroll-active {
+  position: absolute;
+  width: 10px;
+  right: 0px;
+  top: 0;
+  background-color: #e82ee8;
+  transition: 0.3s ease;
+  border-radius: 30px;
+  opacity: 0;
+}
 .js-greetings {
   font-size: 32px;
   color: white;
 }
 .js-container {
-  position: absolute;
+  /* position: absolute; */
+  display: inline-block;
+  vertical-align: middle;
+  float: left;
+  width: 500px;
   height: 780px;
-  right: 55%;
+  /* right: 51%;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translateY(-50%); */
   text-align: center;
-  padding: 0 50px;
   animation: fadeIn 0.5s linear;
   text-shadow: 2px 2px rgba(0, 0, 0, 0.5);
   user-select: none;
   background-color: rgba(0, 0, 0, 0.5);
 }
 .js-memo-list {
-  position: absolute;
+  /* position: absolute; */
+  display: inline-block;
+  vertical-align: middle;
+  float: right;
   height: 780px;
-  width: 400px;
+  width: 600px;
   padding: 0;
-  left: 55%;
+  /* left: 51%;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translateY(-50%); */
   text-align: center;
   animation: fadeIn 0.5s linear;
   text-shadow: 2px 2px rgba(0, 0, 0, 0.5);
   user-select: none;
+}
+.js-done-list {
+  width: 100%;
+  height: 380px;
+  margin-top: 16px;
   background-color: rgba(0, 0, 0, 0.5);
+}
+.done-list-title {
+  font-size: 24px;
+  text-align: left;
+  color: #f384f3;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  padding: 6px 12px;
+  box-sizing: border-box;
+}
+.done-list {
+  width: 100%;
+  padding: 0 12px;
+}
+.done-list > li > span:first-child {
+  width: 478px;
 }
 .js-memo-list > input {
   width: 100%;
-  padding: 12px;
+  padding: 6px 12px;
   box-sizing: border-box;
   border-bottom: 1px solid rgba(0, 0, 0, 0.3);
   color: #f384f3;
+  background-color: rgba(0, 0, 0, 0.5);
 }
 .js-memo-list > .setting {
   width: 100%;
@@ -125,6 +212,7 @@ button:hover {
   color: #fff;
   font-size: 16px;
   text-align: right;
+  background-color: rgba(0, 0, 0, 0.5);
 }
 .js-memo-list > .setting > button {
   margin: 0 6px;
@@ -134,7 +222,7 @@ button:hover {
 }
 .js-memo-list > textarea {
   width: 100%;
-  height: calc(100% - 86px);
+  height: 309px;
   border: 0;
   color: #fff;
   font-size: 18px;
@@ -142,6 +230,7 @@ button:hover {
   box-sizing: border-box;
   background-color: initial;
   resize: none;
+  background-color: rgba(0, 0, 0, 0.5);
 }
 .js-memo-list > button {
   height: 44px;

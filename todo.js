@@ -1,26 +1,67 @@
 const toDoForm = document.querySelector(".js-toDoForm"),
   toDoInput = toDoForm.querySelector("input"),
   toDoList = document.querySelector(".js-toDoList"),
+  doneList = document.querySelector(".done-list"),
   toDoListCover = document.querySelector(".js-cover"),
+  toDoListCover2 = document.querySelector(".done-cover"),
   scrollBarBg = document.querySelector(".js-cover .scroll-bg"),
-  scrollBar = document.querySelector(".js-cover .scroll-active");
+  scrollBarBg2 = document.querySelector(".done-cover .scroll-bg"),
+  scrollBar = document.querySelector(".js-cover .scroll-active"),
+  scrollBar2 = document.querySelector(".done-cover .scroll-active");
 
 const TODOS_LS = "toDos";
 
 let toDos = [];
 let scroll = 0;
+let scroll2 = 0;
 
 function checkToDo(event) {
   const btn = event.target.parentNode;
   const li = btn.parentNode;
   const item = btn.previousElementSibling;
-  if (item.style.color === "") {
-    item.style.textDecoration = "line-through";
-    item.style.color = "#fff";
+  const toDoListLS = JSON.parse(localStorage.getItem(TODOS_LS));
+  const idx = toDoListLS.findIndex(v => v.text === item.innerText);
+  const leftList = toDoListLS.filter((v, i) => i < idx);
+  const rightList = toDoListLS.filter((v, i) => i > idx);
+  const currentItem = toDoListLS.filter((v, i) => i === idx);
+  if (currentItem[0].done === true) {
+    currentItem[0] = Object.assign({}, currentItem[0], { done: false });
+    console.log("doneList", doneList, doneList.childElementCount);
+    // if (
+    //   doneList &&
+    //   doneList.children.findIndex(v => v.textContent === item.innerText) !== -1
+    // ) {
+    //   doneList.removeChild(li);
+    // }
+    for (let i = 0; i < doneList.childElementCount; i++) {
+      console.log(doneList.children[i].textContent, item.innerText);
+      if (doneList.children[i].textContent === item.innerText) {
+        doneList.removeChild(doneList.children[i]);
+      }
+    }
+    paintToDo(item.innerText, false);
   } else {
-    item.style.textDecoration = "";
-    item.style.color = "";
+    currentItem[0] = Object.assign({}, currentItem[0], { done: true });
+    console.log("toDoList", toDoList, toDoList.childElementCount);
+    // if (
+    //   toDoList &&
+    //   toDoList.children.findIndex(v => v.textContent === item.innerText) !== -1
+    // ) {
+    //   toDoList.removeChild(li);
+    // }
+    for (let i = 0; i < toDoList.childElementCount; i++) {
+      console.log(toDoList.children[i].textContent, item.innerText);
+      if (toDoList.children[i].textContent === item.innerText) {
+        toDoList.removeChild(toDoList.children[i]);
+      }
+    }
+    paintToDo(item.innerText, true);
   }
+  setScrollBar();
+  localStorage.setItem(
+    TODOS_LS,
+    JSON.stringify(leftList.concat(currentItem).concat(rightList))
+  );
 }
 
 function deleteToDo(event) {
@@ -30,7 +71,11 @@ function deleteToDo(event) {
   localStorage.removeItem(key);
   memoTitle.value = "";
   textArea.value = "";
-  toDoList.removeChild(li);
+  if (li.parentNode.classList.value === "done-list") {
+    doneList.removeChild(li);
+  } else if (li.parentNode.classList.value === "js-toDoList") {
+    toDoList.removeChild(li);
+  }
   const cleanToDos = toDos.filter(function(toDo) {
     return toDo.id !== parseInt(li.id, 10);
   });
@@ -39,10 +84,13 @@ function deleteToDo(event) {
     scrollBarBg.style.opacity = "0";
     scrollBar.style.opacity = "0";
   }
+  if (doneList.childElementCount <= 9) {
+    scrollBarBg2.style.opacity = "0";
+    scrollBar2.style.opacity = "0";
+  }
   setScrollBarHeight();
   saveToDos();
   scroll = toDoList.childElementCount - 10;
-  // moveScroll();
   generateToast("delete");
 }
 
@@ -60,8 +108,6 @@ function toggleToDo(event) {
 }
 
 function onWheel(event) {
-  const prevY = toDoList.style.transform.split("px, ")[1];
-  const numPrevY = parseInt(prevY, 10);
   if (event.deltaY > 0) {
     if (scroll + 10 < toDoList.childElementCount) {
       scroll++;
@@ -82,13 +128,50 @@ function moveScroll() {
 
 function setScrollBarHeight() {
   scrollBar.style.height = `${(10 / toDoList.childElementCount) * 360}px`;
+  scrollBar2.style.height = `${(9 / doneList.childElementCount) * 324}px`;
+}
+function onWheel2(event) {
+  if (event.deltaY > 0) {
+    if (scroll2 + 9 < doneList.childElementCount) {
+      scroll2++;
+    }
+  } else {
+    if (scroll2 > 0) {
+      scroll2--;
+    }
+  }
+  moveScroll2();
+}
+
+function moveScroll2() {
+  doneList.style.transform = "translate3D(0px, " + scroll2 * -36 + "px, 0px)";
+  scrollBar2.style.top =
+    parseFloat((scroll2 * 324) / doneList.childElementCount) + "px";
 }
 
 function initScroll() {
   scrollBar.style.top = "0";
   toDoList.style.transform = `translate3D(0px, 0px, 0px)`;
 }
-
+function setScrollBar() {
+  if (toDoList.childElementCount > 10) {
+    scrollBarBg.style.opacity = "1";
+    scrollBar.style.opacity = "1";
+    toDoListCover.addEventListener("wheel", onWheel);
+  } else {
+    scrollBarBg.style.opacity = "0";
+    scrollBar.style.opacity = "0";
+  }
+  console.log(doneList.childElementCount);
+  if (doneList.childElementCount > 9) {
+    scrollBarBg2.style.opacity = "1";
+    scrollBar2.style.opacity = "1";
+    toDoListCover2.addEventListener("wheel", onWheel2);
+  } else {
+    scrollBarBg2.style.opacity = "0";
+    scrollBar2.style.opacity = "0";
+  }
+}
 function paintToDo(text, done) {
   const li = document.createElement("li");
   const delBtn = document.createElement("span");
@@ -106,25 +189,18 @@ function paintToDo(text, done) {
   const span = document.createElement("span");
   const newId = toDos.length + 1;
   span.innerText = text;
-  if (done) {
-    span.style.textDecoration = "line-through";
-    span.style.textDecorationColor = "#e82ee8";
-    span.style.color = "#fff";
-  }
   span.addEventListener("click", toggleToDo);
   li.appendChild(span);
   li.appendChild(chkBtn);
   li.appendChild(delBtn);
   li.id = newId;
-  toDoList.insertBefore(li, toDoList.firstChild);
-  // toDoList.appendChild(li);
-  if (toDoList.childElementCount > 10) {
-    if (toDoListCover.style.opacity === "") {
-      scrollBarBg.style.opacity = "1";
-      scrollBar.style.opacity = "1";
-    }
-    toDoListCover.addEventListener("wheel", onWheel);
+  if (done) {
+    doneList.insertBefore(li, doneList.firstChild);
+  } else {
+    toDoList.insertBefore(li, toDoList.firstChild);
   }
+  // toDoList.appendChild(li);
+  setScrollBar();
   const toDoObj = {
     text,
     id: newId,
@@ -142,16 +218,16 @@ function handleSubmit(event) {
     return;
   }
   if (
+    localStorage.getItem(TODOS_LS) &&
     JSON.parse(localStorage.getItem(TODOS_LS)).findIndex(
       v => v.text === currentValue
     ) !== -1
   ) {
     return;
   }
-  paintToDo(currentValue);
+  paintToDo(currentValue, false);
   toDoInput.value = "";
   scroll = toDoList.childElementCount - 10;
-  // moveScroll();
   generateToast("add");
 }
 
